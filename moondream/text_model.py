@@ -17,11 +17,14 @@ class TextModel:
 
         with init_empty_weights():
             self.model = PhiForCausalLM(phi_config)
-
+            
+        offload_folder = r"C:\Users\Admin\sensei\offload_folder"
+        
         self.model = load_checkpoint_and_dispatch(
             self.model,
-            f"{model_path}/text_model.pt",
-            device_map="auto",
+            model_path + "/text_model.pt",
+            offload_folder = offload_folder,
+            device_map="auto"
         )
 
         self.text_emb = self.model.get_input_embeddings()
