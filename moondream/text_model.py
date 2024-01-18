@@ -18,7 +18,7 @@ class TextModel:
         with init_empty_weights():
             self.model = PhiForCausalLM(phi_config)
             
-        offload_folder = r"C:\Users\Admin\sensei\offload_folder"
+        offload_folder = r"/home/vizuosense/offload_folder"
         
         self.model = load_checkpoint_and_dispatch(
             self.model,
