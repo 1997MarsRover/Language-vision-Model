@@ -50,9 +50,9 @@ class TextModel:
         else:
             assert prompt.count("<image>") == 1
             before, after = prompt.split("<image>")
-            embeds.append(self.text_emb(_tokenize(f"{before}<image>").float())
+            embeds.append(self.text_emb(_tokenize(f"{before}<image>").float()))
             embeds.append(image_embeds.to(self.model.device))
-            embeds.append(self.text_emb(_tokenize(f"</image>{after}").float())
+            embeds.append(self.text_emb(_tokenize(f"</image>{after}").float()))
 
         return torch.cat(embeds, dim=1)
 
