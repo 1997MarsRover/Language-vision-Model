@@ -17,13 +17,12 @@ class TextModel:
 
         with init_empty_weights():
             self.model = PhiForCausalLM(phi_config)
-            
+
         offload_folder = r"/home/vizuosense/sensei/offload_folder"
-        
         self.model = load_checkpoint_and_dispatch(
             self.model,
             model_path + "/text_model.pt",
-            offload_folder = offload_folder,
+            offload_folder=offload_folder,
             device_map="auto"
         )
 
@@ -33,7 +32,7 @@ class TextModel:
         embeds = []
 
         def _add_toks(toks):
-            embeds.append(self.text_emb(toks.to(torch.float)))
+            embeds.append(self.text_emb(toks.to(torch.long)))
 
         def _tokenize(txt):
             return self.tokenizer(
@@ -46,13 +45,13 @@ class TextModel:
         )
 
         if "<image>" not in prompt:
-            embeds.append(self.text_emb(_tokenize(prompt).to(torch.float)))
+            embeds.append(self.text_emb(_tokenize(prompt).to(torch.long)))
         else:
             assert prompt.count("<image>") == 1
             before, after = prompt.split("<image>")
-            embeds.append(self.text_emb(_tokenize(f"{before}<image>").to(torch.float)))
+            embeds.append(self.text_emb(_tokenize(f"{before}<image>").to(torch.long)))
             embeds.append(image_embeds.to(self.model.device))
-            embeds.append(self.text_emb(_tokenize(f"</image>{after}").to(torch.float)))
+            embeds.append(self.text_emb(_tokenize(f"</image>{after}").to(torch.long)))
 
         return torch.cat(embeds, dim=1)
 
