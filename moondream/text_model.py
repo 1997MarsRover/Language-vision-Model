@@ -33,7 +33,7 @@ class TextModel:
         embeds = []
 
         def _add_toks(toks):
-            embeds.append(self.text_emb(toks.float()))
+            embeds.append(self.text_emb(toks.to(torch.long)))
 
         def _tokenize(txt):
             return self.tokenizer(
@@ -46,13 +46,13 @@ class TextModel:
         )
 
         if "<image>" not in prompt:
-            embeds.append(self.text_emb(_tokenize(prompt).float()))
+            embeds.append(self.text_emb(_tokenize(prompt).to(torch.long)))
         else:
             assert prompt.count("<image>") == 1
             before, after = prompt.split("<image>")
-            embeds.append(self.text_emb(_tokenize(f"{before}<image>").float()))
+            embeds.append(self.text_emb(_tokenize(f"{before}<image>").to(torch.long)))
             embeds.append(image_embeds.to(self.model.device))
-            embeds.append(self.text_emb(_tokenize(f"</image>{after}").float()))
+            embeds.append(self.text_emb(_tokenize(f"</image>{after}").to(torch.long)))
 
         return torch.cat(embeds, dim=1)
 
