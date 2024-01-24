@@ -33,8 +33,6 @@ else:
         generation_kwargs = dict(
             image_embeds=image_embeds, question=question, streamer=streamer
         )
-        thread = Thread(target=text_model.answer_question, kwargs=generation_kwargs)
-        thread.start()
 
         buffer = ""
         for new_text in streamer:
@@ -42,4 +40,5 @@ else:
             if not new_text.endswith("Human"):
                 print(buffer, end="", flush=True)
                 buffer = ""
+
         print(re.sub("Human$", "", buffer))

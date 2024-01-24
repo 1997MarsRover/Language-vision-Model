@@ -32,7 +32,7 @@ class TextModel:
         embeds = []
 
         def _add_toks(toks):
-            embeds.append(self.text_emb(toks.to(torch.long)))
+            embeds.append(self.text_emb(toks))
 
         def _tokenize(txt):
             return self.tokenizer(
