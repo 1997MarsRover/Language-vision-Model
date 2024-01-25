@@ -51,4 +51,4 @@ with gr.Blocks() as demo:
   prompt.submit(moondream, [img, prompt], output)
 
 # launch gradio demo with debug mode on
-demo.queue().launch(debug=True)
+demo.queue().launch(debug=True, share=True)
